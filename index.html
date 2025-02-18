@@ -1,43 +1,84 @@
 <!DOCTYPE HTML>
-<!--
-	Aerial by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
--->
 <html>
 	<head>
-		<title>Simone Aporta/Cyber Profile</title>
+		<title>Cyber_Profile</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
 		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+		<style>
+			body {
+				background-color: #0a0a0a;
+				color: #fff;
+				font-family: Arial, sans-serif;
+				overflow: hidden;
+			}
+
+			#bg {
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background: radial-gradient(circle, #45007e 10%, #000000 90%);
+				animation: animateBg 10s infinite alternate;
+			}
+
+			@keyframes animateBg {
+				0% { filter: hue-rotate(0deg); }
+				100% { filter: hue-rotate(360deg); }
+			}
+
+			nav ul li a {
+				color: #9d4edd;
+				transition: all 0.3s;
+			}
+
+			nav ul li a:hover {
+				color: #d4aaff;
+				transform: scale(1.1);
+			}
+
+			.typing-effect {
+				overflow: hidden;
+				border-right: .15em solid #9d4edd;
+				white-space: nowrap;
+				animation: typing 3s steps(30, end) infinite, blink-caret .75s step-end infinite;
+			}
+
+			@keyframes typing {
+				from { width: 0 }
+				to { width: 100% }
+			}
+
+			@keyframes blink-caret {
+				from, to { border-color: transparent }
+				50% { border-color: #9d4edd }
+			}
+		</style>
 	</head>
 	<body class="is-preload">
+		<div id="bg"></div>
 		<div id="wrapper">
-			<div id="bg"></div>
 			<div id="overlay"></div>
 			<div id="main">
 
-				<!-- Header -->
-					<header id="header">
-						<h1>Simone Aporta</h1>
-						<p>Cyber Security &nbsp;&bull;&nbsp; Hackademy UniNa &nbsp;&bull;&nbsp; Stay secure, stay curious!</p>
-						<nav>
-							<ul>
-								<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
-								<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
-								<li><a href="#" class="icon brands fa-dribbble"><span class="label">Dribbble</span></a></li>
-								<li><a href="#" class="icon brands fa-github"><span class="label">Github</span></a></li>
-								<li><a href="#" class="icon solid fa-envelope"><span class="label">Email</span></a></li>
-							</ul>
-						</nav>
-					</header>
+				<header id="header">
+					<h1>Simone Aporta</h1>
+					<p class="typing-effect">Cyber Security &nbsp;&bull;&nbsp; Hackademy UniNa &nbsp;&bull;&nbsp; Stay secure, stay curious!</p>
+					<nav>
+						<ul>
+							<li><a href="https://github.com/tuo-username" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+							<li><a href="https://www.linkedin.com/in/tuo-username" class="icon brands fa-linkedin"><span class="label">LinkedIn</span></a></li>
+							<li><a href="https://www.instagram.com/tuo-username" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
+							<li><a href="mailto:tuo-email@example.com" class="icon solid fa-envelope"><span class="label">Email</span></a></li>
+						</ul>
+					</nav>
+				</header>
 
-				<!-- Footer -->
-					<footer id="footer">
-						<span class="copyright">&copy; Untitled. Design: <a href="http://html5up.net">HTML5 UP</a>.</span>
-					</footer>
-
+				<footer id="footer">
+					<span class="copyright">&copy; 2025 Simone Aporta. Design by <a href="http://html5up.net">HTML5 UP</a>.</span>
+				</footer>
 			</div>
 		</div>
 		<script>
