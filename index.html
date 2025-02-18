@@ -19,14 +19,20 @@
 				left: 0;
 				width: 100%;
 				height: 100%;
-				background: radial-gradient(circle, #45007e 10%, #1a0033 90%);
-				animation: animateBg 10s infinite alternate;
+				background: #140033;
+				z-index: -1;
 			}
-			@keyframes animateBg {
-				0% { background: radial-gradient(circle, #45007e 10%, #1a0033 90%); }
-				50% { background: radial-gradient(circle, #7b00d9 10%, #3a0066 90%); }
-				100% { background: radial-gradient(circle, #9d4edd 10%, #45007e 90%); }
+			
+			/* Canvas per le onde digitali */
+			#canvas {
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				z-index: -1;
 			}
+			
 			nav ul li a {
 				color: #ffffff;
 				transition: all 0.3s;
@@ -35,17 +41,7 @@
 				color: #d4aaff;
 				transform: scale(1.1);
 			}
-			.typing-effect {
-				display: flex;
-				justify-content: center;
-				width: 100%;
-				border-right: .15em solid #9d4edd;
-				white-space: nowrap;
-				animation: typing 3s steps(30, end) forwards, blink-caret .75s step-end infinite;
-				overflow: hidden;
-				max-width: 0;
-				margin: 0 auto;
-			}
+			
 			@keyframes typing {
 				from { max-width: 0 }
 				to { max-width: 100% }
@@ -58,6 +54,7 @@
 	</head>
 	<body class="is-preload">
 		<div id="bg"></div>
+		<canvas id="canvas"></canvas>
 		<div id="wrapper">
 			<div id="overlay"></div>
 			<div id="main">
@@ -68,10 +65,10 @@
 					</div>
 					<nav>
 						<ul>
-							<li><a href="https://github.com/SimoneAporta" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
-							<li><a href="https://www.linkedin.com/in/SimoneAporta" class="icon brands fa-linkedin"><span class="label">LinkedIn</span></a></li>
-							<li><a href="https://www.instagram.com/simoapo" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
-							<li><a href="mailto:aporta.simone@gmail.com" class="icon solid fa-envelope"><span class="label">Email</span></a></li>
+							<li><a href="https://github.com/tuo-username" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+							<li><a href="https://www.linkedin.com/in/tuo-username" class="icon brands fa-linkedin"><span class="label">LinkedIn</span></a></li>
+							<li><a href="https://www.instagram.com/tuo-username" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
+							<li><a href="mailto:tuo-email@example.com" class="icon solid fa-envelope"><span class="label">Email</span></a></li>
 						</ul>
 					</nav>
 				</header>
@@ -81,9 +78,101 @@
 			</div>
 		</div>
 		<script>
-			window.onload = function() { document.body.classList.remove('is-preload'); }
+			window.onload = function() { 
+				document.body.classList.remove('is-preload');
+				initWaves();
+			}
 			window.ontouchmove = function() { return false; }
 			window.onorientationchange = function() { document.body.scrollTop = 0; }
+			
+			// Script per le onde digitali
+			function initWaves() {
+				const canvas = document.getElementById('canvas');
+				const ctx = canvas.getContext('2d');
+				
+				// Imposta canvas a dimensione finestra
+				canvas.width = window.innerWidth;
+				canvas.height = window.innerHeight;
+				
+				// Array di punti per le onde
+				const points = [];
+				const numPoints = 100;
+				const gridSize = 50;
+				
+				// Crea griglia di punti
+				for (let x = 0; x < canvas.width + gridSize; x += gridSize) {
+					for (let y = 0; y < canvas.height + gridSize; y += gridSize) {
+						points.push({
+							x: x,
+							y: y,
+							originalX: x,
+							originalY: y,
+							vx: 0,
+							vy: 0
+						});
+					}
+				}
+				
+				// Funzione di animazione
+				function animate() {
+					// Pulisci canvas
+					ctx.clearRect(0, 0, canvas.width, canvas.height);
+					
+					// Background gradient
+					const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+					gradient.addColorStop(0, '#1a0033');
+					gradient.addColorStop(1, '#45007e');
+					ctx.fillStyle = gradient;
+					ctx.fillRect(0, 0, canvas.width, canvas.height);
+					
+					// Disegna linee tra punti
+					for (let i = 0; i < points.length; i++) {
+						// Muovi punti in base a onde digitali
+						const time = Date.now() * 0.001;
+						points[i].x = points[i].originalX + Math.sin(time * 0.5 + points[i].originalY * 0.02) * 15;
+						points[i].y = points[i].originalY + Math.cos(time * 0.3 + points[i].originalX * 0.03) * 15;
+						
+						// Disegna connessioni tra punti vicini
+						for (let j = i + 1; j < points.length; j++) {
+							const dx = points[i].x - points[j].x;
+							const dy = points[i].y - points[j].y;
+							const distance = Math.sqrt(dx * dx + dy * dy);
+							
+							if (distance < gridSize * 1.5) {
+								// Opacità basata sulla distanza
+								const opacity = 1 - (distance / (gridSize * 1.5));
+								
+								// Disegna linea
+								ctx.beginPath();
+								ctx.moveTo(points[i].x, points[i].y);
+								ctx.lineTo(points[j].x, points[j].y);
+								ctx.strokeStyle = `rgba(157, 78, 221, ${opacity * 0.5})`;
+								ctx.lineWidth = 1;
+								ctx.stroke();
+							}
+						}
+					}
+					
+					// Disegna punti
+					for (let i = 0; i < points.length; i++) {
+						ctx.beginPath();
+						ctx.arc(points[i].x, points[i].y, 1, 0, Math.PI * 2);
+						ctx.fillStyle = '#b280ff';
+						ctx.fill();
+					}
+					
+					requestAnimationFrame(animate);
+				}
+				
+				// Ridimensiona canvas quando cambia la finestra
+				window.addEventListener('resize', function() {
+					canvas.width = window.innerWidth;
+					canvas.height = window.innerHeight;
+				});
+				
+				// Avvia animazione
+				animate();
+			}
 		</script>
 	</body>
 </html>
