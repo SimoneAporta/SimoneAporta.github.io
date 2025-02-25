@@ -1,12 +1,10 @@
 <!DOCTYPE HTML>
-<html>
+<html lang="it">
 	<head>
 		<title>Simone_Aporta / Cyber_Profile</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="assets/css/main.css" />
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
 		<style>
 			@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500;700&display=swap');
 			
@@ -22,13 +20,19 @@
 				--glow: 0 0 10px var(--primary-light);
 			}
 			
+			* {
+				box-sizing: border-box;
+				margin: 0;
+				padding: 0;
+			}
+			
 			body {
 				background-color: var(--bg-dark);
 				color: var(--text-light);
 				font-family: 'Roboto Mono', monospace;
-				overflow: hidden;
 				margin: 0;
 				padding: 0;
+				overflow-x: hidden;
 			}
 			
 			#bg {
@@ -57,9 +61,11 @@
 				min-height: 100vh;
 				z-index: 1;
 				position: relative;
+				padding: 20px;
 			}
 			
 			#main {
+				width: 100%;
 				max-width: 800px;
 				text-align: center;
 				padding: 2rem;
@@ -93,7 +99,7 @@
 			
 			h1 {
 				color: var(--text-light);
-				font-size: 3rem;
+				font-size: clamp(2rem, 5vw, 3rem);
 				letter-spacing: 3px;
 				margin-bottom: 0.5rem;
 				position: relative;
@@ -111,12 +117,20 @@
 				background: linear-gradient(90deg, transparent, var(--primary), transparent);
 			}
 			
+			.typing-effect-container {
+				display: flex;
+				justify-content: center;
+				margin: 1.5rem 0;
+				height: 1.5rem;
+				overflow: hidden;
+			}
+			
 			.typing-effect {
 				border-right: 2px solid var(--primary);
 				white-space: nowrap;
 				overflow: hidden;
 				display: inline-block;
-				font-size: 1.2rem;
+				font-size: clamp(0.9rem, 3vw, 1.2rem);
 				animation: 
 					typing 3.5s steps(40, end),
 					blink-caret 0.75s step-end infinite;
@@ -140,12 +154,13 @@
 				display: flex;
 				justify-content: center;
 				list-style: none;
+				flex-wrap: wrap;
 				padding: 0;
 				margin: 0;
 			}
 			
 			nav ul li {
-				margin: 0 15px;
+				margin: 10px 15px;
 			}
 			
 			nav ul li a {
@@ -153,31 +168,21 @@
 				font-size: 1.8rem;
 				transition: all 0.3s;
 				position: relative;
-				display: inline-block;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				width: 50px;
+				height: 50px;
+				border-radius: 50%;
+				background-color: rgba(157, 78, 221, 0.2);
+				border: 1px solid var(--primary-dark);
 			}
 			
 			nav ul li a:hover {
 				color: var(--text-highlight);
 				transform: translateY(-5px);
 				text-shadow: var(--glow);
-			}
-			
-			nav ul li a::after {
-				content: '';
-				position: absolute;
-				width: 100%;
-				transform: scaleX(0);
-				height: 2px;
-				bottom: -5px;
-				left: 0;
-				background-color: var(--primary-light);
-				transform-origin: bottom right;
-				transition: transform 0.3s ease-out;
-			}
-			
-			nav ul li a:hover::after {
-				transform: scaleX(1);
-				transform-origin: bottom left;
+				background-color: rgba(157, 78, 221, 0.4);
 			}
 			
 			.skills-container {
@@ -186,17 +191,18 @@
 				justify-content: center;
 				margin-top: 2rem;
 				margin-bottom: 2rem;
+				gap: 10px;
 			}
 			
 			.skill-tag {
 				background-color: rgba(157, 78, 221, 0.2);
 				border: 1px solid var(--primary);
 				border-radius: 20px;
-				padding: 5px 15px;
-				margin: 5px;
+				padding: 8px 15px;
 				font-size: 0.9rem;
 				transition: all 0.3s;
 				cursor: default;
+				white-space: nowrap;
 			}
 			
 			.skill-tag:hover {
@@ -213,7 +219,7 @@
 				margin: 2rem 0;
 				text-align: left;
 				font-family: 'Roboto Mono', monospace;
-				height: 150px;
+				height: 180px;
 				overflow: hidden;
 				position: relative;
 			}
@@ -244,7 +250,7 @@
 			}
 			
 			.terminal-content {
-				height: 100px;
+				height: 120px;
 				overflow: hidden;
 			}
 			
@@ -255,6 +261,7 @@
 				white-space: nowrap;
 				overflow: hidden;
 				animation: typeTerminal 2s steps(40, end);
+				padding: 2px 0;
 			}
 			
 			.terminal-prompt {
@@ -274,6 +281,7 @@
 				height: 100%;
 				pointer-events: none;
 				z-index: -1;
+				overflow: hidden;
 			}
 			
 			.floating-symbol {
@@ -305,7 +313,6 @@
 				text-decoration: underline;
 			}
 			
-			/* Aggiunta di un elemento scanner per effetto cyber */
 			.scanner {
 				position: absolute;
 				top: 0;
@@ -329,29 +336,57 @@
 			
 			/* Responsive design */
 			@media (max-width: 768px) {
-				h1 {
-					font-size: 2.2rem;
-				}
-				
-				.typing-effect {
-					font-size: 1rem;
+				#main {
+					padding: 1.5rem;
 				}
 				
 				.terminal-section {
-					height: 120px;
+					height: 200px;
 				}
 				
 				.terminal-content {
-					height: 70px;
+					height: 140px;
 				}
 				
 				.skill-tag {
 					font-size: 0.8rem;
+					padding: 6px 12px;
+				}
+				
+				nav ul li a {
+					width: 45px;
+					height: 45px;
+					font-size: 1.5rem;
+				}
+			}
+			
+			@media (max-width: 480px) {
+				#main {
+					padding: 1rem;
+				}
+				
+				.skills-container {
+					gap: 5px;
+				}
+				
+				.skill-tag {
+					font-size: 0.7rem;
+					padding: 5px 10px;
+				}
+				
+				nav ul li {
+					margin: 8px 10px;
+				}
+				
+				nav ul li a {
+					width: 40px;
+					height: 40px;
+					font-size: 1.3rem;
 				}
 			}
 		</style>
 	</head>
-	<body class="is-preload">
+	<body>
 		<div id="bg"></div>
 		<canvas id="canvas"></canvas>
 		<div id="wrapper">
@@ -359,7 +394,7 @@
 				<div class="scanner"></div>
 				<header id="header">
 					<h1>Simone Aporta</h1>
-					<div style="display: flex; justify-content: center; overflow: hidden;">
+					<div class="typing-effect-container">
 						<p class="typing-effect">Cyber Security Specialist &nbsp;&bull;&nbsp; Hackademy UniNa &nbsp;&bull;&nbsp; Stay secure, stay curious!</p>
 					</div>
 					
@@ -389,10 +424,10 @@
 					
 					<nav>
 						<ul>
-							<li><a href="https://github.com/SimoneAporta" class="icon"><i class="fab fa-github"></i></a></li>
-							<li><a href="https://www.linkedin.com/in/simone-aporta-a51762221/" class="icon"><i class="fab fa-linkedin"></i></a></li>
-							<li><a href="https://www.instagram.com/simoapo" class="icon"><i class="fab fa-instagram"></i></a></li>
-							<li><a href="mailto:aporta.simone@gmail.com" class="icon"><i class="fas fa-envelope"></i></a></li>
+							<li><a href="https://github.com/SimoneAporta" aria-label="GitHub Profile"><i class="fab fa-github"></i></a></li>
+							<li><a href="https://www.linkedin.com/in/simone-aporta-a51762221/" aria-label="LinkedIn Profile"><i class="fab fa-linkedin"></i></a></li>
+							<li><a href="https://www.instagram.com/simoapo" aria-label="Instagram Profile"><i class="fab fa-instagram"></i></a></li>
+							<li><a href="mailto:aporta.simone@gmail.com" aria-label="Send Email"><i class="fas fa-envelope"></i></a></li>
 						</ul>
 					</nav>
 				</header>
@@ -412,14 +447,10 @@
 		</div>
 		<script>
 			window.onload = function() { 
-				document.body.classList.remove('is-preload');
 				initWaves();
 				initFloatingElements();
 				startTypingEffect();
 			}
-			
-			window.ontouchmove = function() { return false; }
-			window.onorientationchange = function() { document.body.scrollTop = 0; }
 			
 			// Script per le onde digitali migliorato
 			function initWaves() {
@@ -432,7 +463,7 @@
 				
 				// Array di punti per le onde
 				const points = [];
-				const numPoints = 120;
+				const numPoints = Math.min(120, Math.floor((window.innerWidth * window.innerHeight) / 10000));
 				const gridSize = Math.min(40, Math.max(window.innerWidth, window.innerHeight) / 20);
 				
 				// Crea griglia di punti
@@ -463,7 +494,18 @@
 					setTimeout(() => mouseInfluence = false, 100);
 				});
 				
-				// Funzione di animazione
+				// Touch interaction for mobile
+				canvas.addEventListener('touchmove', function(e) {
+					if (e.touches.length > 0) {
+						mouseX = e.touches[0].clientX;
+						mouseY = e.touches[0].clientY;
+						mouseInfluence = true;
+						setTimeout(() => mouseInfluence = false, 100);
+					}
+					e.preventDefault();
+				}, { passive: false });
+				
+				// Funzione di animazione con performance ottimizzata
 				function animate() {
 					// Pulisci canvas
 					ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -475,10 +517,12 @@
 					ctx.fillStyle = gradient;
 					ctx.fillRect(0, 0, canvas.width, canvas.height);
 					
+					// Ottimizzazione: calcola una volta il tempo corrente
+					const time = Date.now() * 0.001;
+					
 					// Disegna linee tra punti
 					for (let i = 0; i < points.length; i++) {
 						// Muovi punti in base a onde digitali
-						const time = Date.now() * 0.001;
 						points[i].x = points[i].originalX + Math.sin(time * 0.4 + points[i].originalY * 0.015) * 12;
 						points[i].y = points[i].originalY + Math.cos(time * 0.3 + points[i].originalX * 0.02) * 12;
 						
@@ -496,23 +540,30 @@
 							}
 						}
 						
-						// Disegna connessioni tra punti vicini
+						// Ottimizzazione: limitare le connessioni ai punti vicini
+						// Calcolare la distanza massima una volta sola
+						const maxDistance = gridSize * 1.8;
+						
 						for (let j = i + 1; j < points.length; j++) {
 							const dx = points[i].x - points[j].x;
 							const dy = points[i].y - points[j].y;
+							
+							// Ottimizzazione: verificare prima se dx o dy da soli sono già maggiori della distanza massima
+							if (Math.abs(dx) > maxDistance || Math.abs(dy) > maxDistance) {
+								continue;
+							}
+							
 							const distance = Math.sqrt(dx * dx + dy * dy);
 							
-							if (distance < gridSize * 1.8) {
+							if (distance < maxDistance) {
 								// Opacità basata sulla distanza
-								const opacity = 1 - (distance / (gridSize * 1.8));
+								const opacity = 1 - (distance / maxDistance);
 								
 								// Disegna linea
 								ctx.beginPath();
 								ctx.moveTo(points[i].x, points[i].y);
 								ctx.lineTo(points[j].x, points[j].y);
 								
-								// Variazione di colore
-								const hue = (time * 10 + distance) % 30 + 270; // Mantiene sui toni del viola
 								ctx.strokeStyle = `rgba(157, 78, 221, ${opacity * 0.6})`;
 								ctx.lineWidth = opacity * 1.5;
 								ctx.stroke();
@@ -544,10 +595,33 @@
 				}
 				
 				// Ridimensiona canvas quando cambia la finestra
-				window.addEventListener('resize', function() {
+				function resizeCanvas() {
 					canvas.width = window.innerWidth;
 					canvas.height = window.innerHeight;
-				});
+					
+					// Aggiorna la posizione dei punti quando la finestra viene ridimensionata
+					const gridSize = Math.min(40, Math.max(window.innerWidth, window.innerHeight) / 20);
+					
+					// Reset dell'array dei punti
+					points.length = 0;
+					
+					// Ricrea la griglia di punti
+					for (let x = 0; x < canvas.width + gridSize; x += gridSize) {
+						for (let y = 0; y < canvas.height + gridSize; y += gridSize) {
+							points.push({
+								x: x,
+								y: y,
+								originalX: x,
+								originalY: y,
+								vx: 0,
+								vy: 0,
+								size: Math.random() * 1.5 + 0.5
+							});
+						}
+					}
+				}
+				
+				window.addEventListener('resize', resizeCanvas);
 				
 				// Avvia animazione
 				animate();
@@ -598,6 +672,3 @@
 		</script>
 	</body>
 </html>
-
-
-
