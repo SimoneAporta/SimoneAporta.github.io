@@ -99,7 +99,7 @@
 			
 			h1 {
 				color: var(--text-light);
-				font-size: clamp(2rem, 5vw, 3rem);
+				font-size: clamp(1.8rem, 4.5vw, 2.8rem); /* Reduced font size */
 				letter-spacing: 3px;
 				margin-bottom: 0.5rem;
 				position: relative;
@@ -130,7 +130,7 @@
 				white-space: nowrap;
 				overflow: hidden;
 				display: inline-block;
-				font-size: clamp(0.9rem, 3vw, 1.2rem);
+				font-size: clamp(0.8rem, 2.8vw, 1.1rem); /* Reduced font size */
 				animation: 
 					typing 3.5s steps(40, end),
 					blink-caret 0.75s step-end infinite;
@@ -176,6 +176,7 @@
 				border-radius: 50%;
 				background-color: rgba(157, 78, 221, 0.2);
 				border: 1px solid var(--primary-dark);
+				text-decoration: none; /* Remove underline from links */
 			}
 			
 			nav ul li a:hover {
@@ -266,6 +267,17 @@
 			
 			.terminal-prompt {
 				color: var(--primary-light);
+			}
+			
+			.terminal-link {
+				color: var(--primary-light);
+				text-decoration: none;
+				cursor: pointer;
+			}
+			
+			.terminal-link:hover {
+				text-decoration: underline;
+				color: var(--text-highlight);
 			}
 			
 			@keyframes typeTerminal {
@@ -414,7 +426,7 @@
 						</div>
 						<div class="terminal-content">
 							<p class="terminal-line"><span class="terminal-prompt">$</span> whoami</p>
-							<p class="terminal-line">simone_aporta - Cyber Security student at @Cyber-HackAdemy-UniNa</p>
+							<p class="terminal-line">simone_aporta - Cyber Security student at <a href="https://cyberhackademy.unina.it/" class="terminal-link" target="_blank">@Cyber-HackAdemy-UniNa</a></p>
 							<p class="terminal-line"><span class="terminal-prompt">$</span> ./skills.sh</p>
 							<p class="terminal-line">Loading security expertise...</p>
 							<p class="terminal-line">Cybersecurity profile initialized successfully.</p>
