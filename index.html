@@ -718,6 +718,17 @@
                 // Show the modal
                 modal.style.display = 'flex';
             }
+
+			function showRiskAssessmentImage(event) {
+                event.preventDefault();
+                const modal = document.getElementById('imageModal');
+                const modalImage = document.getElementById('modalImage');
+                // Set image source
+                modalImage.src = "https://cdn.prod.website-files.com/6320846a1cfec12aedb67ddf/654108910018486c7024d1d1_Copy%20of%20security_through_obscurity.png";
+                modalImage.alt = "Risk Assessment";
+                // Show the modal
+                modal.style.display = 'flex';
+            }
             
             function closeModal() {
                 const modal = document.getElementById('imageModal');
