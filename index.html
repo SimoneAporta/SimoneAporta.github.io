@@ -420,7 +420,7 @@
 						<a href="#" class="skill-tag" onclick="showNetworkSecurityImage(event)">Network Security</a>
 						<a href="#" class="skill-tag" onclick="showEthicalHackingImage(event)">Ethical Hacking</a>
 						<a href="#" class="skill-tag" onclick="showRiskAssessmentImage(event)">Risk Assessment</a>
-						<div class="skill-tag">Risk </div>
+						<a href="#" class="skill-tag" onclick="showSecurityAnalysisImage(event)">Security Analysis</a>
 					</div>
 					
 					<div class="terminal-section">
@@ -726,6 +726,17 @@
                 // Set image source
                 modalImage.src = "https://cdn.prod.website-files.com/6320846a1cfec12aedb67ddf/654108910018486c7024d1d1_Copy%20of%20security_through_obscurity.png";
                 modalImage.alt = "Risk Assessment";
+                // Show the modal
+                modal.style.display = 'flex';
+            }
+
+			function showSecurityAnalysisImage(event) {
+                event.preventDefault();
+                const modal = document.getElementById('imageModal');
+                const modalImage = document.getElementById('modalImage');
+                // Set image source
+                modalImage.src = "https://d12tbd6xzgxi73.cloudfront.net/app/uploads/2024/10/IT-security-meme-7.jpg";
+                modalImage.alt = "Security Analysis";
                 // Show the modal
                 modal.style.display = 'flex';
             }
