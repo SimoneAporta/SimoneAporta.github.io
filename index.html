@@ -266,6 +266,8 @@
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
+            word-break: break-word;
+            padding: 0 1rem;
         }
 
         .section-title::before {
@@ -671,6 +673,11 @@
 
             .skills-grid {
                 grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .skill-category {
+                padding: 1.5rem;
             }
 
             .hero-profile-image {
@@ -684,6 +691,11 @@
 
             .section {
                 padding: 3rem 0;
+            }
+
+            .section-title {
+                margin-bottom: 2rem;
+                font-size: 1.8rem;
             }
         }
 
@@ -706,12 +718,24 @@
             }
 
             .section-title {
-                font-size: 2rem;
+                font-size: 1.6rem;
             }
 
             .hero-profile-image {
                 width: 120px;
                 height: 120px;
+            }
+
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .skill-category {
+                padding: 1.2rem;
+            }
+
+            .skill-category h3 {
+                font-size: 1.1rem;
             }
         }
 
@@ -847,7 +871,7 @@
                 <h2 class="section-title" data-aos="fade-up">competenze_tecniche</h2>
                 
                 <div class="skills-grid">
-                    <div class="skill-category" data-aos="fade-up" data-aos-delay="100">
+                    <div class="skill-category" data-aos="fade-up" data-aos-delay="100" data-category="os">
                         <div class="skill-category-header">
                             <h3><i class="fas fa-desktop"></i> Sistemi Operativi</h3>
                             <i class="fas fa-chevron-down skill-toggle"></i>
@@ -865,7 +889,7 @@
                         </div>
                     </div>
 
-                    <div class="skill-category" data-aos="fade-up" data-aos-delay="200">
+                    <div class="skill-category" data-aos="fade-up" data-aos-delay="200" data-category="tools">
                         <div class="skill-category-header">
                             <h3><i class="fas fa-tools"></i> Strumenti & Piattaforme</h3>
                             <i class="fas fa-chevron-down skill-toggle"></i>
@@ -895,7 +919,7 @@
                         </div>
                     </div>
 
-                    <div class="skill-category" data-aos="fade-up" data-aos-delay="300">
+                    <div class="skill-category" data-aos="fade-up" data-aos-delay="300" data-category="languages">
                         <div class="skill-category-header">
                             <h3><i class="fas fa-code"></i> Linguaggi & Script</h3>
                             <i class="fas fa-chevron-down skill-toggle"></i>
@@ -1066,85 +1090,72 @@
                         top: offsetTop,
                         behavior: 'smooth'
                     });
+                    
+                    // Chiudi menu mobile se aperto
+                    if (nav.classList.contains('active')) {
+                        nav.classList.remove('active');
+                        mobileMenuBtn.querySelector('i').className = 'fas fa-bars';
+                    }
                 }
-                
-                nav.classList.remove('active');
-                mobileMenuBtn.querySelector('i').className = 'fas fa-bars';
             });
         });
 
-        // Header scroll effect
+        // Header visibility
         const header = document.getElementById('header');
         const headerProfile = document.getElementById('headerProfile');
+        let lastScrollTop = 0;
 
-        function toggleHeader() {
-            if (window.pageYOffset > 300) {
+        window.addEventListener('scroll', function() {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            // Mostra/nascondi header
+            if (scrollTop > 100) {
                 header.classList.add('visible');
                 headerProfile.classList.add('visible');
+                
+                if (scrollTop > lastScrollTop && scrollTop > 500) {
+                    header.style.transform = 'translateY(-100%)';
+                } else {
+                    header.style.transform = 'translateY(0)';
+                }
             } else {
                 header.classList.remove('visible');
                 headerProfile.classList.remove('visible');
             }
-        }
-
-        // Update active nav link on scroll
-        function updateActiveNavLink() {
-            let current = 'home';
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop - 150;
-                if (window.pageYOffset >= sectionTop) {
-                    current = section.getAttribute('id');
-                }
-            });
-
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href') === `#${current}`) {
-                    link.classList.add('active');
-                }
-            });
-        }
-
-        // Back to Top Button
-        const backToTop = document.getElementById('backToTop');
-
-        function toggleBackToTop() {
-            if (window.pageYOffset > 500) {
+            
+            lastScrollTop = scrollTop;
+            
+            // Back to top button
+            const backToTop = document.getElementById('backToTop');
+            if (scrollTop > 500) {
                 backToTop.classList.add('visible');
             } else {
                 backToTop.classList.remove('visible');
             }
-        }
-
-        backToTop.addEventListener('click', function() {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
+            
+            // Active nav link
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 150;
+                const sectionHeight = section.clientHeight;
+                if (scrollTop >= sectionTop && scrollTop < sectionTop + sectionHeight) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
             });
         });
 
-        // Scroll event listeners
-        window.addEventListener('scroll', function() {
-            toggleHeader();
-            updateActiveNavLink();
-            toggleBackToTop();
-        });
-
-        // Initialize
-        toggleHeader();
-        updateActiveNavLink();
-        toggleBackToTop();
-
-        // Skill categories toggle
-        const skillCategories = document.querySelectorAll('.skill-category');
-
-        skillCategories.forEach(category => {
-            const header = category.querySelector('.skill-category-header');
-            const list = category.querySelector('.skill-list');
-            
-            header.addEventListener('click', function() {
-                category.classList.toggle('active');
-                list.classList.toggle('active');
+        // Back to top
+        document.getElementById('backToTop').addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
             });
         });
 
@@ -1152,44 +1163,71 @@
         const modal = document.getElementById('imageModal');
         const modalImage = document.getElementById('modalImage');
         const modalClose = document.getElementById('modalClose');
-        const highlights = document.querySelectorAll('.highlight');
+        const highlights = document.querySelectorAll('.highlight[data-image]');
 
-        // Apri modal quando si clicca su un highlight
         highlights.forEach(highlight => {
             highlight.addEventListener('click', function() {
-                const imagePath = this.getAttribute('data-image');
-                if (imagePath) {
-                    modalImage.src = imagePath;
-                    modalImage.alt = this.textContent;
-                    modal.classList.add('active');
-                    document.body.style.overflow = 'hidden'; // Previene lo scroll del body
-                }
+                const imageSrc = this.getAttribute('data-image');
+                modalImage.src = imageSrc;
+                modalImage.alt = this.textContent;
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
             });
         });
 
-        // Chiudi modal
-        function closeModal() {
+        modalClose.addEventListener('click', function() {
             modal.classList.remove('active');
-            document.body.style.overflow = 'auto'; // Ripristina lo scroll del body
-        }
+            document.body.style.overflow = 'auto';
+        });
 
-        modalClose.addEventListener('click', closeModal);
-
-        // Chiudi modal cliccando fuori dall'immagine
         modal.addEventListener('click', function(e) {
             if (e.target === modal) {
-                closeModal();
+                modal.classList.remove('active');
+                document.body.style.overflow = 'auto';
             }
         });
 
-        // Chiudi modal con ESC
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && modal.classList.contains('active')) {
-                closeModal();
+        // Accordion per competenze tecniche
+        const skillCategories = document.querySelectorAll('.skill-category');
+        
+        skillCategories.forEach(category => {
+            category.addEventListener('click', function() {
+                // Chiudi tutte le altre categorie
+                skillCategories.forEach(otherCategory => {
+                    if (otherCategory !== category) {
+                        otherCategory.classList.remove('active');
+                        const otherList = otherCategory.querySelector('.skill-list');
+                        otherList.classList.remove('active');
+                    }
+                });
+                
+                // Apri/chiudi la categoria corrente
+                this.classList.toggle('active');
+                const skillList = this.querySelector('.skill-list');
+                skillList.classList.toggle('active');
+            });
+        });
+
+        // Gestione click fuori dalle categorie per chiuderle
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.skill-category')) {
+                skillCategories.forEach(category => {
+                    category.classList.remove('active');
+                    const skillList = category.querySelector('.skill-list');
+                    skillList.classList.remove('active');
+                });
             }
+        });
+
+        // Keyboard navigation per accordion
+        skillCategories.forEach(category => {
+            category.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    this.click();
+                }
+            });
         });
     </script>
 </body>
 </html>
-
-
