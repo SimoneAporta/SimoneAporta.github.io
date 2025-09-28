@@ -394,6 +394,7 @@
             text-decoration: none;
             transition: var(--transition);
             border-bottom: 1px solid var(--accent-cyber);
+            cursor: pointer;
         }
 
         .highlight:hover {
@@ -515,6 +516,74 @@
             color: var(--accent-cyber);
             width: 30px;
             text-align: center;
+        }
+
+        /* Modal per immagini */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(245, 19, 249, 0.3);
+            animation: zoomIn 0.3s ease;
+        }
+
+        .modal-image {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: var(--transition);
+        }
+
+        .modal-close:hover {
+            background: var(--accent-cyber);
+            transform: scale(1.1);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes zoomIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
         }
 
         /* Back to Top */
@@ -687,11 +756,21 @@
         <div class="preloader-text">root@security:~$ loading...</div>
     </div>
 
+    <!-- Modal per immagini -->
+    <div class="modal" id="imageModal">
+        <div class="modal-content">
+            <img src="" alt="" class="modal-image" id="modalImage">
+            <button class="modal-close" id="modalClose" aria-label="Chiudi">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+
     <!-- Header -->
     <header class="header" role="banner" id="header">
         <div class="header-container">
             <div class="profile-section" id="headerProfile">
-                <img src="https://via.placeholder.com/100x100/f513f9/000000?text=Profile" 
+                <img src="images/foto.jpg" 
                      alt="Foto profilo di Simone Aporta" 
                      class="profile-image" 
                      id="headerProfileImage">
@@ -720,7 +799,7 @@
             <div class="container">
                 <div class="hero-content" data-aos="fade-up">
                     <div class="hero-profile">
-                        <img src="https://via.placeholder.com/280x280/7B3FBF/ffffff?text=Profile" 
+                        <img src="images/foto.jpg" 
                              alt="Foto personale di Simone Aporta" 
                              class="hero-profile-image" 
                              id="heroProfileImage">
@@ -749,9 +828,9 @@
                         ed Accenture, specializzato nella formazione di esperti su tematiche avanzate nel campo della sicurezza informatica.
                     </p>
                     <p>
-                        Durante questo percorso ho sviluppato competenze specialistiche in <span class="highlight">Ethical Hacking</span>, 
-                        <span class="highlight">Cloud Security</span>, <span class="highlight">IoT Security</span> e 
-                        <span class="highlight">AI Security</span>, con particolare focus sulle tecniche di "Offensive Defense" 
+                        Durante questo percorso ho sviluppato competenze specialistiche in <span class="highlight" data-image="images/hacking.jpg">Ethical Hacking</span>, 
+                        <span class="highlight" data-image="images/cloud.jpg">Cloud Security</span>, <span class="highlight" data-image="images/iot.jpg">IoT Security</span> e 
+                        <span class="highlight" data-image="images/ai.jpg">AI Security</span>, con particolare focus sulle tecniche di "Offensive Defense" 
                         e sull'utilizzo del Machine Learning per l'analisi della sicurezza.
                     </p>
                     <p>
@@ -1026,31 +1105,11 @@
             });
         }
 
-        // Skills Category Toggle
-        const skillCategories = document.querySelectorAll('.skill-category');
-        
-        skillCategories.forEach(category => {
-            category.addEventListener('click', function() {
-                const skillList = this.querySelector('.skill-list');
-                const isActive = this.classList.contains('active');
-                
-                skillCategories.forEach(cat => {
-                    if (cat !== this) {
-                        cat.classList.remove('active');
-                        cat.querySelector('.skill-list').classList.remove('active');
-                    }
-                });
-                
-                this.classList.toggle('active');
-                skillList.classList.toggle('active');
-            });
-        });
-
         // Back to Top Button
         const backToTop = document.getElementById('backToTop');
 
         function toggleBackToTop() {
-            if (window.pageYOffset > 300) {
+            if (window.pageYOffset > 500) {
                 backToTop.classList.add('visible');
             } else {
                 backToTop.classList.remove('visible');
@@ -1064,25 +1123,71 @@
             });
         });
 
-        // Scroll event listener
-        let ticking = false;
-        function onScroll() {
-            if (!ticking) {
-                requestAnimationFrame(function() {
-                    toggleHeader();
-                    updateActiveNavLink();
-                    toggleBackToTop();
-                    ticking = false;
-                });
-                ticking = true;
-            }
+        // Scroll event listeners
+        window.addEventListener('scroll', function() {
+            toggleHeader();
+            updateActiveNavLink();
+            toggleBackToTop();
+        });
+
+        // Initialize
+        toggleHeader();
+        updateActiveNavLink();
+        toggleBackToTop();
+
+        // Skill categories toggle
+        const skillCategories = document.querySelectorAll('.skill-category');
+
+        skillCategories.forEach(category => {
+            const header = category.querySelector('.skill-category-header');
+            const list = category.querySelector('.skill-list');
+            
+            header.addEventListener('click', function() {
+                category.classList.toggle('active');
+                list.classList.toggle('active');
+            });
+        });
+
+        // Modal per immagini
+        const modal = document.getElementById('imageModal');
+        const modalImage = document.getElementById('modalImage');
+        const modalClose = document.getElementById('modalClose');
+        const highlights = document.querySelectorAll('.highlight');
+
+        // Apri modal quando si clicca su un highlight
+        highlights.forEach(highlight => {
+            highlight.addEventListener('click', function() {
+                const imagePath = this.getAttribute('data-image');
+                if (imagePath) {
+                    modalImage.src = imagePath;
+                    modalImage.alt = this.textContent;
+                    modal.classList.add('active');
+                    document.body.style.overflow = 'hidden'; // Previene lo scroll del body
+                }
+            });
+        });
+
+        // Chiudi modal
+        function closeModal() {
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto'; // Ripristina lo scroll del body
         }
 
-        window.addEventListener('scroll', onScroll);
+        modalClose.addEventListener('click', closeModal);
 
-        // Console message
-        console.log('%c🛡️ Cybersecurity Portfolio Loaded', 'color: #f513f9; font-size: 16px; font-weight: bold;');
-        console.log('%cDeveloped with security in mind', 'color: #7B3FBF;');
+        // Chiudi modal cliccando fuori dall'immagine
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+
+        // Chiudi modal con ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && modal.classList.contains('active')) {
+                closeModal();
+            }
+        });
     </script>
 </body>
 </html>
