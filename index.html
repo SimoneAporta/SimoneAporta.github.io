@@ -1,759 +1,1088 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html lang="it">
-	<head>
-		<title>Simone_Aporta / Cyber_Profile</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-		<style>
-			@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500;700&display=swap');
-			
-			:root {
-				--primary: #9d4edd;
-				--primary-light: #b280ff;
-				--primary-dark: #45007e;
-				--bg-dark: #0a0a0a;
-				--bg-gradient-start: #140033;
-				--bg-gradient-end: #300061;
-				--text-light: #ffffff;
-				--text-highlight: #d4aaff;
-				--glow: 0 0 10px var(--primary-light);
-			}
-			
-			* {
-				box-sizing: border-box;
-				margin: 0;
-				padding: 0;
-			}
-			
-			body {
-				background-color: var(--bg-dark);
-				color: var(--text-light);
-				font-family: 'Roboto Mono', monospace;
-				margin: 0;
-				padding: 0;
-				overflow-x: hidden;
-			}
-			
-			#bg {
-				position: fixed;
-				top: 0;
-				left: 0;
-				width: 100%;
-				height: 100%;
-				background: linear-gradient(145deg, var(--bg-gradient-start), var(--bg-gradient-end));
-				z-index: -1;
-			}
-			
-			#canvas {
-				position: fixed;
-				top: 0;
-				left: 0;
-				width: 100%;
-				height: 100%;
-				z-index: -1;
-			}
-			
-			#wrapper {
-				display: flex;
-				justify-content: center;
-				align-items: center;
-				min-height: 100vh;
-				z-index: 1;
-				position: relative;
-				padding: 20px;
-			}
-			
-			#main {
-				width: 100%;
-				max-width: 800px;
-				text-align: center;
-				padding: 2rem;
-				border-radius: 15px;
-				background-color: rgba(10, 10, 10, 0.7);
-				backdrop-filter: blur(10px);
-				box-shadow: 0 0 30px rgba(157, 78, 221, 0.3);
-				position: relative;
-				overflow: hidden;
-			}
-			
-			#main::before {
-				content: "";
-				position: absolute;
-				top: -5px;
-				left: -5px;
-				right: -5px;
-				bottom: -5px;
-				border: 1px solid var(--primary);
-				border-radius: 16px;
-				opacity: 0.6;
-				z-index: -1;
-				animation: pulse 3s infinite;
-			}
-			
-			@keyframes pulse {
-				0% { opacity: 0.2; }
-				50% { opacity: 0.6; }
-				100% { opacity: 0.2; }
-			}
-			
-			h1 {
-				color: var(--text-light);
-				font-size: clamp(1.8rem, 4.5vw, 2.8rem); /* Reduced font size */
-				letter-spacing: 3px;
-				margin-bottom: 0.5rem;
-				position: relative;
-				display: inline-block;
-				text-shadow: var(--glow);
-			}
-			
-			h1::after {
-				content: "";
-				position: absolute;
-				width: 100%;
-				height: 2px;
-				bottom: -10px;
-				left: 0;
-				background: linear-gradient(90deg, transparent, var(--primary), transparent);
-			}
-			
-			.typing-effect-container {
-				display: flex;
-				justify-content: center;
-				margin: 1.5rem 0;
-				height: 1.5rem;
-				overflow: hidden;
-			}
-			
-			.typing-effect {
-				border-right: 2px solid var(--primary);
-				white-space: nowrap;
-				overflow: hidden;
-				display: inline-block;
-				font-size: clamp(0.8rem, 2.8vw, 1.1rem); /* Reduced font size */
-				animation: 
-					typing 3.5s steps(40, end),
-					blink-caret 0.75s step-end infinite;
-			}
-			
-			@keyframes typing {
-				from { width: 0 }
-				to { width: 100% }
-			}
-			
-			@keyframes blink-caret {
-				from, to { border-color: transparent }
-				50% { border-color: var(--primary) }
-			}
-			
-			nav {
-				margin: 2rem 0;
-			}
-			
-			nav ul {
-				display: flex;
-				justify-content: center;
-				list-style: none;
-				flex-wrap: wrap;
-				padding: 0;
-				margin: 0;
-			}
-			
-			nav ul li {
-				margin: 10px 15px;
-			}
-			
-			nav ul li a {
-				color: var(--text-light);
-				font-size: 1.8rem;
-				transition: all 0.3s;
-				position: relative;
-				display: flex;
-				justify-content: center;
-				align-items: center;
-				width: 50px;
-				height: 50px;
-				border-radius: 50%;
-				background-color: rgba(157, 78, 221, 0.2);
-				border: 1px solid var(--primary-dark);
-				text-decoration: none; /* Remove underline from links */
-			}
-			
-			nav ul li a:hover {
-				color: var(--text-highlight);
-				transform: translateY(-5px);
-				text-shadow: var(--glow);
-				background-color: rgba(157, 78, 221, 0.4);
-			}
-			
-			.skills-container {
-				display: flex;
-				flex-wrap: wrap;
-				justify-content: center;
-				margin-top: 2rem;
-				margin-bottom: 2rem;
-				gap: 10px;
-			}
-			
-			.skill-tag {
-				background-color: rgba(157, 78, 221, 0.2);
-				border: 1px solid var(--primary);
-				border-radius: 20px;
-				padding: 8px 15px;
-				font-size: 0.9rem;
-				transition: all 0.3s;
-				cursor: default;
-				white-space: nowrap;
-			}
-            
-			a.skill-tag {
-				text-decoration: none;
-				color: var(--text-light);
-				cursor: pointer;
-			}
-			
-			.skill-tag:hover {
-				background-color: rgba(157, 78, 221, 0.4);
-				transform: scale(1.05);
-				box-shadow: var(--glow);
-			}
-			
-			.terminal-section {
-				background-color: rgba(10, 10, 10, 0.8);
-				border: 1px solid var(--primary-dark);
-				border-radius: 10px;
-				padding: 20px;
-				margin: 2rem 0;
-				text-align: left;
-				font-family: 'Roboto Mono', monospace;
-				height: 180px;
-				overflow: hidden;
-				position: relative;
-			}
-			
-			.terminal-header {
-				display: flex;
-				align-items: center;
-				margin-bottom: 10px;
-				border-bottom: 1px solid var(--primary-dark);
-				padding-bottom: 10px;
-			}
-			
-			.terminal-button {
-				width: 12px;
-				height: 12px;
-				border-radius: 50%;
-				margin-right: 8px;
-			}
-			
-			.terminal-close { background-color: #ff5f57; }
-			.terminal-minimize { background-color: #ffbd2e; }
-			.terminal-maximize { background-color: #28ca41; }
-			
-			.terminal-title {
-				margin-left: 10px;
-				font-size: 0.9rem;
-				color: var(--text-light);
-			}
-			
-			.terminal-content {
-				height: 120px;
-				overflow: hidden;
-			}
-			
-			.terminal-line {
-				line-height: 1.5;
-				color: var(--text-light);
-				margin: 0;
-				white-space: nowrap;
-				overflow: hidden;
-				animation: typeTerminal 2s steps(40, end);
-				padding: 2px 0;
-			}
-			
-			.terminal-prompt {
-				color: var(--primary-light);
-			}
-			
-			.terminal-link {
-				color: var(--primary-light);
-				text-decoration: none;
-				cursor: pointer;
-			}
-			
-			.terminal-link:hover {
-				text-decoration: underline;
-				color: var(--text-highlight);
-			}
-			
-			@keyframes typeTerminal {
-				from { width: 0 }
-				to { width: 100% }
-			}
-			
-			.floating-elements {
-				position: absolute;
-				top: 0;
-				left: 0;
-				width: 100%;
-				height: 100%;
-				pointer-events: none;
-				z-index: -1;
-				overflow: hidden;
-			}
-			
-			.floating-symbol {
-				position: absolute;
-				color: var(--primary);
-				opacity: 0.2;
-				animation: float 15s infinite;
-			}
-			
-			@keyframes float {
-				0% { transform: translateY(0) rotate(0deg); opacity: 0; }
-				10% { opacity: 0.2; }
-				90% { opacity: 0.2; }
-				100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
-			}
-			
-			.copyright {
-				margin-top: 2rem;
-				font-size: 0.8rem;
-				opacity: 0.7;
-			}
-			
-			.copyright a {
-				color: var(--primary-light);
-				text-decoration: none;
-			}
-			
-			.copyright a:hover {
-				text-decoration: underline;
-			}
-			
-			.scanner {
-				position: absolute;
-				top: 0;
-				height: 100%;
-				width: 100%;
-				background: linear-gradient(
-					to bottom,
-					transparent 0%,
-					rgba(157, 78, 221, 0.15) 50%,
-					transparent 100%
-				);
-				animation: scan 4s linear infinite;
-				pointer-events: none;
-				opacity: 0.5;
-			}
-			
-			@keyframes scan {
-				0% { transform: translateY(-100%); }
-				100% { transform: translateY(100%); }
-			}
-			
-			/* Responsive design */
-			@media (max-width: 768px) {
-				#main {
-					padding: 1.5rem;
-				}
-				
-				.terminal-section {
-					height: 200px;
-				}
-				
-				.terminal-content {
-					height: 140px;
-				}
-				
-				.skill-tag {
-					font-size: 0.8rem;
-					padding: 6px 12px;
-				}
-				
-				nav ul li a {
-					width: 45px;
-					height: 45px;
-					font-size: 1.5rem;
-				}
-			}
-			
-			@media (max-width: 480px) {
-				#main {
-					padding: 1rem;
-				}
-				
-				.skills-container {
-					gap: 5px;
-				}
-				
-				.skill-tag {
-					font-size: 0.7rem;
-					padding: 5px 10px;
-				}
-				
-				nav ul li {
-					margin: 8px 10px;
-				}
-				
-				nav ul li a {
-					width: 40px;
-					height: 40px;
-					font-size: 1.3rem;
-				}
-			}
-		</style>
-	</head>
-	<body>
-		<div id="bg"></div>
-		<canvas id="canvas"></canvas>
-		<div id="wrapper">
-			<div id="main">
-				<div class="scanner"></div>
-				<header id="header">
-					<h1>Simone Aporta</h1>
-					<div class="typing-effect-container">
-						<p class="typing-effect">Cyber Security &nbsp;&bull;&nbsp; Hackademy UniNa &nbsp;&bull;&nbsp; Stay secure, stay curious!</p>
-					</div>
-					
-					<div class="skills-container">
-						<a href="#" class="skill-tag" onclick="showNetworkSecurityImage(event)">Network Security</a>
-						<a href="#" class="skill-tag" onclick="showEthicalHackingImage(event)">Ethical Hacking</a>
-						<a href="#" class="skill-tag" onclick="showRiskAssessmentImage(event)">Risk Assessment</a>
-						<a href="#" class="skill-tag" onclick="showSecurityAnalysisImage(event)">Security Analysis</a>
-					</div>
-					
-					<div class="terminal-section">
-						<div class="terminal-header">
-							<div class="terminal-button terminal-close"></div>
-							<div class="terminal-button terminal-minimize"></div>
-							<div class="terminal-button terminal-maximize"></div>
-							<div class="terminal-title">simone@securebox:~</div>
-						</div>
-						<div class="terminal-content">
-							<p class="terminal-line"><span class="terminal-prompt">$</span> whoami</p>
-							<p class="terminal-line">simone_aporta - Cyber Security student at <a href="https://cyberhackademy.unina.it/" class="terminal-link" target="_blank">@Cyber-HackAdemy-UniNa</a></p>
-							<p class="terminal-line"><span class="terminal-prompt">$</span> ./skills.sh</p>
-							<p class="terminal-line">Loading security expertise...</p>
-							<p class="terminal-line">Cybersecurity profile initialized successfully.</p>
-						</div>
-					</div>
-					
-					<nav>
-						<ul>
-							<li><a href="https://github.com/SimoneAporta" aria-label="GitHub Profile"><i class="fab fa-github"></i></a></li>
-							<li><a href="https://www.linkedin.com/in/simone-aporta-a51762221/" aria-label="LinkedIn Profile"><i class="fab fa-linkedin"></i></a></li>
-							<li><a href="https://www.instagram.com/simoapo" aria-label="Instagram Profile"><i class="fab fa-instagram"></i></a></li>
-							<li><a href="mailto:aporta.simone@gmail.com" aria-label="Send Email"><i class="fas fa-envelope"></i></a></li>
-						</ul>
-					</nav>
-				</header>
-				<footer id="footer">
-					<span class="copyright">&copy; 2025 Simone Aporta. Design inspired by <a href="http://html5up.net">HTML5 UP</a>.</span>
-				</footer>
-				
-				<div class="floating-elements">
-					<span class="floating-symbol" style="top: 10%; left: 10%; font-size: 20px;">&#123;</span>
-					<span class="floating-symbol" style="top: 30%; left: 80%; font-size: 24px;">&#125;</span>
-					<span class="floating-symbol" style="top: 70%; left: 30%; font-size: 22px;">&lt;/&gt;</span>
-					<span class="floating-symbol" style="top: 60%; left: 70%; font-size: 26px;">$_</span>
-					<span class="floating-symbol" style="top: 20%; left: 40%; font-size: 20px;">#!/</span>
-					<span class="floating-symbol" style="top: 80%; left: 20%; font-size: 24px;">* *</span>
-				</div>
-			</div>
-		</div>
-		
-		<!-- Image Modal -->
-		<div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center;">
-			<div style="position: relative; max-width: 90%; max-height: 90%;">
-				<img id="modalImage" src="" alt="Security Image" style="max-width: 100%; max-height: 90vh; border: 2px solid var(--primary);">
-				<button onclick="closeModal()" style="position: absolute; top: -40px; right: 0; background: var(--primary); border: none; color: white; padding: 8px 15px; border-radius: 5px; cursor: pointer;">Close</button>
-			</div>
-		</div>
-		
-		<script>
-			window.onload = function() { 
-				initWaves();
-				initFloatingElements();
-				startTypingEffect();
-			}
-			
-			// Script per le onde digitali migliorato
-			function initWaves() {
-				const canvas = document.getElementById('canvas');
-				const ctx = canvas.getContext('2d');
-				
-				// Imposta canvas a dimensione finestra
-				canvas.width = window.innerWidth;
-				canvas.height = window.innerHeight;
-				
-				// Array di punti per le onde
-				const points = [];
-				const numPoints = Math.min(120, Math.floor((window.innerWidth * window.innerHeight) / 10000));
-				const gridSize = Math.min(40, Math.max(window.innerWidth, window.innerHeight) / 20);
-				
-				// Crea griglia di punti
-				for (let x = 0; x < canvas.width + gridSize; x += gridSize) {
-					for (let y = 0; y < canvas.height + gridSize; y += gridSize) {
-						points.push({
-							x: x,
-							y: y,
-							originalX: x,
-							originalY: y,
-							vx: 0,
-							vy: 0,
-							size: Math.random() * 1.5 + 0.5
-						});
-					}
-				}
-				
-				// Mouse interaction
-				let mouseX = 0;
-				let mouseY = 0;
-				let mouseRadius = 150;
-				let mouseInfluence = false;
-				
-				canvas.addEventListener('mousemove', function(e) {
-					mouseX = e.clientX;
-					mouseY = e.clientY;
-					mouseInfluence = true;
-					setTimeout(() => mouseInfluence = false, 100);
-				});
-				
-				// Touch interaction for mobile
-				canvas.addEventListener('touchmove', function(e) {
-					if (e.touches.length > 0) {
-						mouseX = e.touches[0].clientX;
-						mouseY = e.touches[0].clientY;
-						mouseInfluence = true;
-						setTimeout(() => mouseInfluence = false, 100);
-					}
-					e.preventDefault();
-				}, { passive: false });
-				
-				// Funzione di animazione con performance ottimizzata
-				function animate() {
-					// Pulisci canvas
-					ctx.clearRect(0, 0, canvas.width, canvas.height);
-					
-					// Background gradient - più scuro
-					const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-					gradient.addColorStop(0, '#140033');
-					gradient.addColorStop(1, '#300061');
-					ctx.fillStyle = gradient;
-					ctx.fillRect(0, 0, canvas.width, canvas.height);
-					
-					// Ottimizzazione: calcola una volta il tempo corrente
-					const time = Date.now() * 0.001;
-					
-					// Disegna linee tra punti
-					for (let i = 0; i < points.length; i++) {
-						// Muovi punti in base a onde digitali
-						points[i].x = points[i].originalX + Math.sin(time * 0.4 + points[i].originalY * 0.015) * 12;
-						points[i].y = points[i].originalY + Math.cos(time * 0.3 + points[i].originalX * 0.02) * 12;
-						
-						// Effetto mouse
-						if (mouseInfluence) {
-							const dx = mouseX - points[i].x;
-							const dy = mouseY - points[i].y;
-							const dist = Math.sqrt(dx * dx + dy * dy);
-							
-							if (dist < mouseRadius) {
-								const force = (mouseRadius - dist) / mouseRadius;
-								const angle = Math.atan2(dy, dx);
-								points[i].x -= Math.cos(angle) * force * 10;
-								points[i].y -= Math.sin(angle) * force * 10;
-							}
-						}
-						
-						// Ottimizzazione: limitare le connessioni ai punti vicini
-						// Calcolare la distanza massima una volta sola
-						const maxDistance = gridSize * 1.8;
-						
-						for (let j = i + 1; j < points.length; j++) {
-							const dx = points[i].x - points[j].x;
-							const dy = points[i].y - points[j].y;
-							
-							// Ottimizzazione: verificare prima se dx o dy da soli sono già maggiori della distanza massima
-							if (Math.abs(dx) > maxDistance || Math.abs(dy) > maxDistance) {
-								continue;
-							}
-							
-							const distance = Math.sqrt(dx * dx + dy * dy);
-							
-							if (distance < maxDistance) {
-								// Opacità basata sulla distanza
-								const opacity = 1 - (distance / maxDistance);
-								
-								// Disegna linea
-								ctx.beginPath();
-								ctx.moveTo(points[i].x, points[i].y);
-								ctx.lineTo(points[j].x, points[j].y);
-								
-								ctx.strokeStyle = `rgba(157, 78, 221, ${opacity * 0.6})`;
-								ctx.lineWidth = opacity * 1.5;
-								ctx.stroke();
-							}
-						}
-					}
-					
-					// Disegna punti
-					for (let i = 0; i < points.length; i++) {
-						ctx.beginPath();
-						ctx.arc(points[i].x, points[i].y, points[i].size, 0, Math.PI * 2);
-						ctx.fillStyle = '#b280ff';
-						ctx.fill();
-						
-						// Aggiungi luminosità ai punti
-						ctx.beginPath();
-						ctx.arc(points[i].x, points[i].y, points[i].size * 2.5, 0, Math.PI * 2);
-						const gradient = ctx.createRadialGradient(
-							points[i].x, points[i].y, points[i].size * 0.5,
-							points[i].x, points[i].y, points[i].size * 2.5
-						);
-						gradient.addColorStop(0, 'rgba(178, 128, 255, 0.4)');
-						gradient.addColorStop(1, 'rgba(178, 128, 255, 0)');
-						ctx.fillStyle = gradient;
-						ctx.fill();
-					}
-					
-					requestAnimationFrame(animate);
-				}
-				
-				// Ridimensiona canvas quando cambia la finestra
-				function resizeCanvas() {
-					canvas.width = window.innerWidth;
-					canvas.height = window.innerHeight;
-					
-					// Aggiorna la posizione dei punti quando la finestra viene ridimensionata
-					const gridSize = Math.min(40, Math.max(window.innerWidth, window.innerHeight) / 20);
-					
-					// Reset dell'array dei punti
-					points.length = 0;
-					
-					// Ricrea la griglia di punti
-					for (let x = 0; x < canvas.width + gridSize; x += gridSize) {
-						for (let y = 0; y < canvas.height + gridSize; y += gridSize) {
-							points.push({
-								x: x,
-								y: y,
-								originalX: x,
-								originalY: y,
-								vx: 0,
-								vy: 0,
-								size: Math.random() * 1.5 + 0.5
-							});
-						}
-					}
-				}
-				
-				window.addEventListener('resize', resizeCanvas);
-				
-				// Avvia animazione
-				animate();
-			}
-			
-			// Crea elementi fluttuanti aggiuntivi
-			function initFloatingElements() {
-				const floatingElements = document.querySelector('.floating-elements');
-				const symbols = ['⚛', '💻', '🔒', '🛡️', '⚠️', '💾', '$_', '{...}', '</>', '0010', '1001'];
-				
-				for (let i = 0; i < 12; i++) {
-					const element = document.createElement('span');
-					element.className = 'floating-symbol';
-					element.textContent = symbols[Math.floor(Math.random() * symbols.length)];
-					element.style.left = `${Math.random() * 100}%`;
-					element.style.top = `${Math.random() * 100}%`;
-					element.style.fontSize = `${Math.random() * 14 + 12}px`;
-					element.style.opacity = '0.2';
-					element.style.animationDelay = `${Math.random() * 15}s`;
-					element.style.animationDuration = `${Math.random() * 10 + 10}s`;
-					floatingElements.appendChild(element);
-				}
-			}
-			
-			// Effetto di battitura nella sezione terminale
-			function startTypingEffect() {
-				const terminalLines = document.querySelectorAll('.terminal-line');
-				
-				terminalLines.forEach((line, index) => {
-					line.style.display = 'none';
-				});
-				
-				function showNextLine(index = 0) {
-					if (index < terminalLines.length) {
-						terminalLines[index].style.display = 'block';
-						terminalLines[index].style.animation = 'typeTerminal 1s steps(40, end)';
-						
-						setTimeout(() => {
-							showNextLine(index + 1);
-						}, 1000);
-					}
-				}
-				
-				setTimeout(() => {
-					showNextLine();
-				}, 500);
-			}
-            
-            // Modal functions for images
-            function showNetworkSecurityImage(event) {
-                event.preventDefault();
-                const modal = document.getElementById('imageModal');
-                const modalImage = document.getElementById('modalImage');
-                // Set image source
-                modalImage.src = "https://www.asylas.com/wp-content/uploads/2020/12/12-Hackerman.jpg";
-                modalImage.alt = "Network Security";
-                // Show the modal
-                modal.style.display = 'flex';
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simone Aporta | Cybersecurity Specialist - Portfolio Professionale</title>
+    <meta name="description" content="Portfolio professionale di Simone Aporta, Cybersecurity Specialist specializzato in Ethical Hacking, Penetration Testing e Security Research.">
+    <meta name="keywords" content="cybersecurity, ethical hacking, penetration testing, security, portfolio">
+    <meta name="author" content="Simone Aporta">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
+    
+    <style>
+        /* Reset & Variables */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #121212;
+            --bg-card: #1a1a1a;
+            --accent-primary: #7B3FBF;
+            --accent-secondary: #9F5FC7;
+            --accent-cyber: #f513f9;
+            --accent-cyber-dark: #c410c7;
+            --accent-cyber-light: #ff59ff;
+            --text-primary: #ffffff;
+            --text-secondary: #b3b3b3;
+            --text-muted: #666666;
+            --border-color: #333333;
+            --border-cyber: #f513f9;
+            --transition: all 0.3s ease;
+            --glow: 0 0 20px rgba(123, 63, 191, 0.4);
+            --glow-cyber: 0 0 20px rgba(245, 19, 249, 0.6);
+            --glow-cyber-subtle: 0 0 15px rgba(245, 19, 249, 0.3);
+        }
+
+        /* Base Styles */
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 100px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: var(--transition);
+        }
+
+        /* Matrix Background */
+        .matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -10;
+            opacity: 0.03;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .matrix-line {
+            position: absolute;
+            font-family: 'Fira Code', monospace;
+            color: var(--accent-cyber);
+            font-size: 12px;
+            animation: matrixFall 8s linear infinite;
+            white-space: nowrap;
+        }
+
+        @keyframes matrixFall {
+            0% { transform: translateY(-100px); opacity: 1; }
+            100% { transform: translateY(100vh); opacity: 0; }
+        }
+
+        /* Preloader */
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-primary);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            transition: opacity 0.5s ease;
+        }
+
+        .preloader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loader {
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--border-color);
+            border-top: 3px solid var(--accent-cyber);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+            box-shadow: var(--glow-cyber-subtle);
+        }
+
+        .preloader-text {
+            font-family: 'Fira Code', monospace;
+            color: var(--accent-cyber);
+            font-size: 0.9rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(18, 18, 18, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 1000;
+            padding: 1rem 0;
+            transition: var(--transition);
+            transform: translateY(-100%);
+        }
+
+        .header.visible {
+            transform: translateY(0);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .profile-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .profile-section.visible {
+            opacity: 1;
+        }
+
+        .profile-image {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid var(--accent-cyber);
+            object-fit: cover;
+            box-shadow: var(--glow-cyber);
+            transition: var(--transition);
+        }
+
+        .profile-image:hover {
+            transform: scale(1.05);
+            box-shadow: var(--glow-cyber);
+        }
+
+        .profile-info h1 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 0;
+            color: var(--text-primary);
+        }
+
+        .profile-info .subtitle {
+            font-size: 0.85rem;
+            color: var(--accent-cyber);
+            font-family: 'Fira Code', monospace;
+            font-weight: 500;
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        /* Navigation */
+        .nav {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            transition: var(--transition);
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+        }
+
+        .nav a:hover,
+        .nav a.active {
+            color: var(--accent-cyber);
+            background: rgba(245, 19, 249, 0.1);
+            box-shadow: 0 0 10px rgba(245, 19, 249, 0.2);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: 2px solid var(--border-color);
+            color: var(--text-primary);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0.6rem;
+            border-radius: 0.5rem;
+            transition: var(--transition);
+        }
+
+        .mobile-menu-btn:hover {
+            border-color: var(--accent-cyber);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Section */
+        .section {
+            padding: 5rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 3rem;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-cyber));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .section-title::before {
+            content: "/";
+            color: var(--text-primary);
+            margin-right: 5px;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: var(--bg-primary);
+            position: relative;
+            margin-top: 80px;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(123, 63, 191, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(245, 19, 249, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(159, 95, 199, 0.06) 0%, transparent 50%);
+            z-index: -1;
+        }
+
+        .hero-profile {
+            margin-bottom: 2rem;
+        }
+
+        .hero-profile-image {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            border: 3px solid var(--accent-cyber);
+            object-fit: cover;
+            box-shadow: var(--glow-cyber);
+            margin-bottom: 1.5rem;
+            transition: var(--transition);
+        }
+
+        .hero-profile-image:hover {
+            transform: scale(1.05);
+        }
+
+        .hero-name {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-cyber));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(245, 19, 249, 0.3);
+        }
+
+        .hero-title {
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            font-family: 'Fira Code', monospace;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .cursor {
+            display: inline-block;
+            background: var(--accent-cyber);
+            width: 8px;
+            height: 1.2em;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        .hero-cta {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-cyber));
+            color: white;
+            text-decoration: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: var(--transition);
+            box-shadow: var(--glow-cyber);
+            margin-top: 2rem;
+        }
+
+        .hero-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(245, 19, 249, 0.4);
+        }
+
+        /* About Section */
+        .about-content h3 {
+            color: var(--text-primary);
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .about-content p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .highlight {
+            color: var(--accent-cyber);
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+            border-bottom: 1px solid var(--accent-cyber);
+        }
+
+        .highlight:hover {
+            text-decoration: none;
+            color: var(--accent-cyber-light);
+            border-bottom: 1px solid var(--accent-cyber-light);
+        }
+
+        /* Skills Section */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .skill-category {
+            background: var(--bg-card);
+            padding: 2rem;
+            border-radius: 1rem;
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .skill-category:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-cyber);
+            box-shadow: var(--glow-cyber-subtle);
+        }
+
+        .skill-category-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .skill-category h3 {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1.3rem;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .skill-toggle {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            transition: var(--transition);
+        }
+
+        .skill-category.active .skill-toggle {
+            transform: rotate(180deg);
+            color: var(--accent-cyber);
+        }
+
+        .skill-list {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            border-top: 1px solid var(--border-color);
+            padding-top: 0;
+        }
+
+        .skill-list.active {
+            max-height: 500px;
+            padding-top: 1rem;
+        }
+
+        .skill-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .skill-item:last-child {
+            border-bottom: none;
+        }
+
+        .skill-name {
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        /* Contact Section */
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: var(--text-primary);
+            text-decoration: none;
+            padding: 1rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 0.8rem;
+            transition: var(--transition);
+        }
+
+        .contact-item:hover {
+            border-color: var(--accent-cyber);
+            background: rgba(245, 19, 249, 0.05);
+            transform: translateX(5px);
+            box-shadow: var(--glow-cyber-subtle);
+        }
+
+        .contact-item i {
+            font-size: 1.5rem;
+            color: var(--accent-cyber);
+            width: 30px;
+            text-align: center;
+        }
+
+        /* Back to Top */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-cyber));
+            color: white;
+            border: none;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: var(--transition);
+            opacity: 0;
+            visibility: hidden;
+            z-index: 1000;
+            box-shadow: var(--glow-cyber);
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-3px) scale(1.1);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        .footer p {
+            color: var(--text-muted);
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .contact-info {
+                max-width: 100%;
             }
-            
-            function showEthicalHackingImage(event) {
-                event.preventDefault();
-                const modal = document.getElementById('imageModal');
-                const modalImage = document.getElementById('modalImage');
-                // Set image source
-                modalImage.src = "https://media.makeameme.org/created/ethical-hacking.jpg";
-                modalImage.alt = "Ethical Hacking";
-                // Show the modal
-                modal.style.display = 'flex';
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                padding: 0 1rem;
             }
 
-			function showRiskAssessmentImage(event) {
-                event.preventDefault();
-                const modal = document.getElementById('imageModal');
-                const modalImage = document.getElementById('modalImage');
-                // Set image source
-                modalImage.src = "https://cdn.prod.website-files.com/6320846a1cfec12aedb67ddf/654108910018486c7024d1d1_Copy%20of%20security_through_obscurity.png";
-                modalImage.alt = "Risk Assessment";
-                // Show the modal
-                modal.style.display = 'flex';
+            .nav {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: var(--bg-secondary);
+                border-top: 1px solid var(--border-color);
+                flex-direction: column;
+                padding: 1rem;
+                gap: 0;
             }
 
-			function showSecurityAnalysisImage(event) {
-                event.preventDefault();
-                const modal = document.getElementById('imageModal');
-                const modalImage = document.getElementById('modalImage');
-                // Set image source
-                modalImage.src = "https://d12tbd6xzgxi73.cloudfront.net/app/uploads/2024/10/IT-security-meme-7.jpg";
-                modalImage.alt = "Security Analysis";
-                // Show the modal
-                modal.style.display = 'flex';
+            .nav.active {
+                display: flex;
             }
-            
-            function closeModal() {
-                const modal = document.getElementById('imageModal');
-                modal.style.display = 'none';
+
+            .nav a {
+                padding: 1rem;
+                border-radius: 0.5rem;
+                margin-bottom: 0.5rem;
             }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-profile-image {
+                width: 150px;
+                height: 150px;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+
+            .section {
+                padding: 3rem 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .profile-image {
+                width: 40px;
+                height: 40px;
+            }
+
+            .profile-info h1 {
+                font-size: 1rem;
+            }
+
+            .profile-info .subtitle {
+                font-size: 0.75rem;
+            }
+
+            .hero-name {
+                font-size: 2rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .hero-profile-image {
+                width: 120px;
+                height: 120px;
+            }
+        }
+
+        /* Focus Styles */
+        *:focus {
+            outline: 2px solid var(--accent-cyber);
+            outline-offset: 2px;
+        }
+
+        /* Selection */
+        ::selection {
+            background: var(--accent-cyber);
+            color: var(--bg-primary);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-cyber);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-cyber-dark);
+        }
+    </style>
+</head>
+<body>
+    <!-- Matrix Background -->
+    <div class="matrix-bg" id="matrixBg"></div>
+
+    <!-- Preloader -->
+    <div class="preloader" id="preloader">
+        <div class="loader"></div>
+        <div class="preloader-text">root@security:~$ loading...</div>
+    </div>
+
+    <!-- Header -->
+    <header class="header" role="banner" id="header">
+        <div class="header-container">
+            <div class="profile-section" id="headerProfile">
+                <img src="https://via.placeholder.com/100x100/f513f9/000000?text=Profile" 
+                     alt="Foto profilo di Simone Aporta" 
+                     class="profile-image" 
+                     id="headerProfileImage">
+                <div class="profile-info">
+                    <h1 id="headerName">Simone Aporta</h1>
+                    <div class="subtitle">Cybersecurity Student</div>
+                </div>
+            </div>
+            <div class="header-controls">
+                <nav class="nav" id="nav" role="navigation">
+                    <a href="#home" class="nav-link active">home</a>
+                    <a href="#about" class="nav-link">whoami</a>
+                    <a href="#skills" class="nav-link">skills</a>
+                    <a href="#contact" class="nav-link">contact</a>
+                </nav>
+                <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu mobile">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main role="main">
+        <!-- Hero Section -->
+        <section class="hero" id="home">
+            <div class="container">
+                <div class="hero-content" data-aos="fade-up">
+                    <div class="hero-profile">
+                        <img src="https://via.placeholder.com/280x280/7B3FBF/ffffff?text=Profile" 
+                             alt="Foto personale di Simone Aporta" 
+                             class="hero-profile-image" 
+                             id="heroProfileImage">
+                        <h2 class="hero-name">Simone Aporta</h2>
+                        <p class="hero-title">Cybersecurity Student<span class="cursor"></span></p>
+                    </div>
+                    
+                    <a href="#about" class="hero-cta">
+                        <i class="fas fa-terminal"></i>
+                        Esplora Portfolio
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section class="section" id="about">
+            <div class="container">
+                <h2 class="section-title" data-aos="fade-up">whoami</h2>
+                
+                <div class="about-content" data-aos="fade-up" data-aos-delay="200">
+                    <h3>Il mio percorso nella Cybersecurity</h3>
+                    <p>
+                        Ho completato il percorso formativo presso l'<a href="https://cyberhackademy.unina.it/" class="highlight" target="_blank">Accenture Cyber HackAdemy</a>, 
+                        un programma avanzato nato dalla collaborazione tra l'Università degli Studi di Napoli Federico II 
+                        ed Accenture, specializzato nella formazione di esperti su tematiche avanzate nel campo della sicurezza informatica.
+                    </p>
+                    <p>
+                        Durante questo percorso ho sviluppato competenze specialistiche in <span class="highlight">Ethical Hacking</span>, 
+                        <span class="highlight">Cloud Security</span>, <span class="highlight">IoT Security</span> e 
+                        <span class="highlight">AI Security</span>, con particolare focus sulle tecniche di "Offensive Defense" 
+                        e sull'utilizzo del Machine Learning per l'analisi della sicurezza.
+                    </p>
+                    <p>
+                        La mia passione per la cybersecurity mi spinge a rimanere sempre aggiornato sulle ultime minacce 
+                        e tecnologie di difesa, contribuendo a costruire un mondo digitale più sicuro.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section class="section" id="skills">
+            <div class="container">
+                <h2 class="section-title" data-aos="fade-up">competenze_tecniche</h2>
+                
+                <div class="skills-grid">
+                    <div class="skill-category" data-aos="fade-up" data-aos-delay="100">
+                        <div class="skill-category-header">
+                            <h3><i class="fas fa-desktop"></i> Sistemi Operativi</h3>
+                            <i class="fas fa-chevron-down skill-toggle"></i>
+                        </div>
+                        <div class="skill-list">
+                            <div class="skill-item">
+                                <span class="skill-name">Linux (Ubuntu, Kali)</span>
+                            </div>
+                            <div class="skill-item">
+                                <span class="skill-name">Windows</span>
+                            </div>
+                            <div class="skill-item">
+                                <span class="skill-name">macOS</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="skill-category" data-aos="fade-up" data-aos-delay="200">
+                        <div class="skill-category-header">
+                            <h3><i class="fas fa-tools"></i> Strumenti & Piattaforme</h3>
+                            <i class="fas fa-chevron-down skill-toggle"></i>
+                        </div>
+                        <div class="skill-list">
+                            <div class="skill-item">
+                                <span class="skill-name">Docker</span>
+                            </div>
+                            <div class="skill-item">
+                                <span class="skill-name">n8n</span>
+                            </div>
+                            <div class="skill-item">
+                                <span class="skill-name">GitHub</span>
+                            </div>
+                            <div class="skill-item">
+                                <span class="skill-name">Visual Studio Code</span>
+                            </div>
+                            <div class="skill-item">
+                                <span class="skill-name">VMware</span>
+                            </div>
+                            <div class="skill-item">
+                                <span class="skill-name">Google SecOps SIEM</span>
+                            </div>
+                            <div class="skill-item">
+                                <span class="skill-name">Google Colab</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="skill-category" data-aos="fade-up" data-aos-delay="300">
+                        <div class="skill-category-header">
+                            <h3><i class="fas fa-code"></i> Linguaggi & Script</h3>
+                            <i class="fas fa-chevron-down skill-toggle"></i>
+                        </div>
+                        <div class="skill-list">
+                            <div class="skill-item">
+                                <span class="skill-name">Python</span>
+                            </div>
+                            <div class="skill-item">
+                                <span class="skill-name">SQL</span>
+                            </div>
+                            <div class="skill-item">
+                                <span class="skill-name">HTML/CSS</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Certificazioni -->
+                <div style="text-align: center; margin-top: 3rem;" data-aos="fade-up" data-aos-delay="500">
+                    <h2 class="section-title">certificazioni</h2>
+                    <a href="https://www.credly.com/users/simone-aporta/badges" class="hero-cta" target="_blank">
+                        <i class="fas fa-certificate"></i>
+                        Visualizza Certificati su Credly
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section class="section" id="contact">
+            <div class="container">
+                <h2 class="section-title" data-aos="fade-up">contatti</h2>
+                
+                <div class="contact-info" data-aos="fade-up" data-aos-delay="200">
+                    <a href="https://www.linkedin.com/in/simone-aporta-a51762221/" class="contact-item" target="_blank">
+                        <i class="fab fa-linkedin"></i>
+                        <div>
+                            <strong>LinkedIn</strong><br>
+                            Simone Aporta
+                        </div>
+                    </a>
+                    
+                    <a href="https://github.com/SimoneAporta" class="contact-item" target="_blank">
+                        <i class="fab fa-github"></i>
+                        <div>
+                            <strong>GitHub</strong><br>
+                            SimoneAporta
+                        </div>
+                    </a>
+                    
+                    <a href="https://www.instagram.com/simoapo" class="contact-item" target="_blank">
+                        <i class="fab fa-instagram"></i>
+                        <div>
+                            <strong>Instagram</strong><br>
+                            @simoapo
+                        </div>
+                    </a>
+                    
+                    <a href="mailto:aporta.simone@gmail.com" class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <strong>Email</strong><br>
+                            aporta.simone@gmail.com
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Simone Aporta - Cybersecurity Student. Tutti i diritti riservati.</p>
+            <p style="margin-top: 0.5rem;">root@security:~$ echo "Stay secure, stay vigilant"</p>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTop" aria-label="Torna su">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            easing: 'ease-out-cubic',
+            once: true,
+            offset: 100
+        });
+
+        // Simple Matrix Rain Effect
+        function createMatrixRain() {
+            const matrixBg = document.getElementById('matrixBg');
+            const chars = '01010110100101';
             
-            // Close modal when clicking outside the image
-            document.getElementById('imageModal').addEventListener('click', function(event) {
-                if (event.target === this) {
-                    closeModal();
+            setInterval(() => {
+                const matrixLine = document.createElement('div');
+                matrixLine.className = 'matrix-line';
+                matrixLine.textContent = chars;
+                matrixLine.style.left = Math.random() * 100 + '%';
+                matrixLine.style.animationDuration = (Math.random() * 3 + 4) + 's';
+                matrixBg.appendChild(matrixLine);
+                
+                setTimeout(() => {
+                    matrixLine.remove();
+                }, 8000);
+            }, 300);
+        }
+
+        // Preloader ottimizzato - Tempo massimo 3 secondi
+        document.addEventListener('DOMContentLoaded', function() {
+            // Prima verifica: nascondi dopo 500ms se il DOM è pronto
+            setTimeout(() => {
+                const preloader = document.getElementById('preloader');
+                if (preloader && !preloader.classList.contains('hidden')) {
+                    preloader.classList.add('hidden');
+                    createMatrixRain();
+                }
+            }, 500);
+        });
+
+        // Seconda verifica: nascondi quando la pagina è completamente caricata
+        window.addEventListener('load', function() {
+            const preloader = document.getElementById('preloader');
+            if (preloader && !preloader.classList.contains('hidden')) {
+                preloader.classList.add('hidden');
+                createMatrixRain();
+            }
+        });
+
+        // Fallback di sicurezza: nascondi comunque dopo massimo 3 secondi
+        setTimeout(() => {
+            const preloader = document.getElementById('preloader');
+            if (preloader && !preloader.classList.contains('hidden')) {
+                preloader.classList.add('hidden');
+                createMatrixRain();
+            }
+        }, 3000);
+
+        // Mobile Menu
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const nav = document.getElementById('nav');
+
+        mobileMenuBtn.addEventListener('click', function() {
+            nav.classList.toggle('active');
+            const icon = mobileMenuBtn.querySelector('i');
+            icon.className = nav.classList.contains('active') ? 'fas fa-times' : 'fas fa-bars';
+        });
+
+        // Navigation
+        const navLinks = document.querySelectorAll('.nav-link');
+        const sections = document.querySelectorAll('section[id]');
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetSection = document.getElementById(targetId);
+                
+                if (targetSection) {
+                    const offsetTop = targetSection.offsetTop - 100;
+                    window.scrollTo({
+                        top: offsetTop,
+                        behavior: 'smooth'
+                    });
+                }
+                
+                nav.classList.remove('active');
+                mobileMenuBtn.querySelector('i').className = 'fas fa-bars';
+            });
+        });
+
+        // Header scroll effect
+        const header = document.getElementById('header');
+        const headerProfile = document.getElementById('headerProfile');
+
+        function toggleHeader() {
+            if (window.pageYOffset > 300) {
+                header.classList.add('visible');
+                headerProfile.classList.add('visible');
+            } else {
+                header.classList.remove('visible');
+                headerProfile.classList.remove('visible');
+            }
+        }
+
+        // Update active nav link on scroll
+        function updateActiveNavLink() {
+            let current = 'home';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 150;
+                if (window.pageYOffset >= sectionTop) {
+                    current = section.getAttribute('id');
                 }
             });
-		</script>
-	</body>
 
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        // Skills Category Toggle
+        const skillCategories = document.querySelectorAll('.skill-category');
+        
+        skillCategories.forEach(category => {
+            category.addEventListener('click', function() {
+                const skillList = this.querySelector('.skill-list');
+                const isActive = this.classList.contains('active');
+                
+                skillCategories.forEach(cat => {
+                    if (cat !== this) {
+                        cat.classList.remove('active');
+                        cat.querySelector('.skill-list').classList.remove('active');
+                    }
+                });
+                
+                this.classList.toggle('active');
+                skillList.classList.toggle('active');
+            });
+        });
+
+        // Back to Top Button
+        const backToTop = document.getElementById('backToTop');
+
+        function toggleBackToTop() {
+            if (window.pageYOffset > 300) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        }
+
+        backToTop.addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Scroll event listener
+        let ticking = false;
+        function onScroll() {
+            if (!ticking) {
+                requestAnimationFrame(function() {
+                    toggleHeader();
+                    updateActiveNavLink();
+                    toggleBackToTop();
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        }
+
+        window.addEventListener('scroll', onScroll);
+
+        // Console message
+        console.log('%c🛡️ Cybersecurity Portfolio Loaded', 'color: #f513f9; font-size: 16px; font-weight: bold;');
+        console.log('%cDeveloped with security in mind', 'color: #7B3FBF;');
+    </script>
+</body>
 </html>
-
