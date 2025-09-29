@@ -421,10 +421,18 @@
             cursor: pointer;
         }
 
-        .skill-category:hover {
+        /* CORREZIONE: Rimuovi l'effetto hover quando la categoria è attiva */
+        .skill-category:not(.active):hover {
             transform: translateY(-5px);
             border-color: var(--accent-cyber);
             box-shadow: var(--glow-cyber-subtle);
+        }
+
+        /* CORREZIONE: Stile per categoria attiva */
+        .skill-category.active {
+            border-color: var(--accent-cyber);
+            box-shadow: var(--glow-cyber-subtle);
+            background: rgba(245, 19, 249, 0.05);
         }
 
         .skill-category-header {
@@ -994,8 +1002,8 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2025 Sim1 - Cybersecurity Student. Tutti i diritti riservati.</p>
-            <p style="margin-top: 0.5rem;">root@security:~$ echo "Stay secure, stay curious!"</p>
+            <p>&copy; 2024 Simone Aporta - Cybersecurity Student. Tutti i diritti riservati.</p>
+            <p style="margin-top: 0.5rem;">root@security:~$ echo "Stay secure, stay vigilant"</p>
         </div>
     </footer>
 
@@ -1187,36 +1195,27 @@
             }
         });
 
-        // Accordion per competenze tecniche
+        // CORREZIONE: Accordion per competenze tecniche - versione semplificata
         const skillCategories = document.querySelectorAll('.skill-category');
         
         skillCategories.forEach(category => {
             category.addEventListener('click', function() {
-                // Chiudi tutte le altre categorie
+                const isActive = this.classList.contains('active');
+                const skillList = this.querySelector('.skill-list');
+                
+                // Chiudi tutte le categorie
                 skillCategories.forEach(otherCategory => {
-                    if (otherCategory !== category) {
-                        otherCategory.classList.remove('active');
-                        const otherList = otherCategory.querySelector('.skill-list');
-                        otherList.classList.remove('active');
-                    }
+                    otherCategory.classList.remove('active');
+                    const otherList = otherCategory.querySelector('.skill-list');
+                    otherList.classList.remove('active');
                 });
                 
-                // Apri/chiudi la categoria corrente
-                this.classList.toggle('active');
-                const skillList = this.querySelector('.skill-list');
-                skillList.classList.toggle('active');
+                // Se la categoria cliccata non era attiva, aprilà
+                if (!isActive) {
+                    this.classList.add('active');
+                    skillList.classList.add('active');
+                }
             });
-        });
-
-        // Gestione click fuori dalle categorie per chiuderle
-        document.addEventListener('click', function(e) {
-            if (!e.target.closest('.skill-category')) {
-                skillCategories.forEach(category => {
-                    category.classList.remove('active');
-                    const skillList = category.querySelector('.skill-list');
-                    skillList.classList.remove('active');
-                });
-            }
         });
 
         // Keyboard navigation per accordion
@@ -1231,4 +1230,3 @@
     </script>
 </body>
 </html>
-
